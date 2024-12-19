@@ -1,0 +1,106 @@
+CREATE TABLE Departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(100)
+);
+
+
+CREATE TABLE Employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    department_id INT,
+    hire_date DATE,
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
+
+
+CREATE TABLE Salaries (
+    salary_id INT PRIMARY KEY,
+    employee_id INT,
+    salary INT,
+    start_date DATE,
+    end_date DATE,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id)
+);
+
+
+INSERT INTO Departments (department_id, department_name)
+VALUES
+(1, 'Sales'),
+(2, 'Marketing'),
+(3, 'HR'),
+(4, 'IT'),
+(5, 'Finance'),
+(6, 'Operations'),
+(7, 'Customer Support');
+
+
+INSERT INTO Employees (employee_id, first_name, last_name, department_id, hire_date)
+VALUES
+(1, 'Mohammad', 'Mohammad', 1, '2020-01-15'),
+(2, 'Fatimah', 'Fatimah', 1, '2019-03-22'),
+(3, 'Ahmed', 'Ahmed', 2, '2021-07-30'),
+(4, 'Ali', 'Ali', 2, '2018-11-10'),
+(5, 'Sara', 'Sara', 3, '2022-06-05'),
+(6, 'Khalid', 'Khalid', 3, '2021-04-12'),
+(7, 'Hala', 'Hala', 4, '2020-09-18'),
+(8, 'Hassan', 'Hassan', 4, '2019-08-23'),
+(9, 'Noor', 'Noor', 5, '2017-12-01'),
+(10, 'Layla', 'Layla', 5, '2020-02-10'),
+(11, 'Salman', 'Salman', 6, '2023-03-18'),
+(12, 'Raed', 'Raed', 6, '2022-08-25'),
+(13, 'Taha', 'Taha', 7, '2021-11-30'),
+(14, 'Mahdi', 'Mahdi', 7, '2020-04-14'),
+(15, 'Momen', 'Momen', 1, '2023-05-21'),
+(16, 'Anas', 'Anas', 2, '2022-01-10'),
+(17, 'Omar', 'Omar', 4, '2021-09-09'),
+(18, 'Ibraheem', 'Ibraheem', 5, '2021-06-15'),
+(19, 'Khalid', 'Khalid', 6, '2023-02-01'),
+(20, 'Rasha', 'Rasha', 7, '2019-10-29');
+
+
+INSERT INTO Salaries (salary_id, employee_id, salary, start_date, end_date)
+VALUES
+(1, 1, 550, '2020-01-15', '2025-06-05'),
+(2, 2, 600, '2019-03-22', '2025-06-05'),
+(3, 3, 450, '2021-07-30', '2025-06-05'),
+(4, 4, 520, '2018-11-10', '2025-06-05'),
+(5, 5, 480, '2022-06-05', '2025-06-05'),
+(6, 6, 530, '2021-04-12', '2025-06-05'),
+(7, 7, 700, '2020-09-18', '2025-06-05');
+
+
+Queries:
+1)
+SELECT Employees.first_name, Employees.last_name, Departments.department_name, Employees.hire_date
+FROM Employees
+INNER JOIN Departments ON Employees.department_id = Departments.department_id;
+
+2)
+SELECT Departments.department_name, Employees.first_name, Employees.last_name
+FROM Departments
+LEFT JOIN Employees ON Departments.department_id = Employees.department_id;
+
+3)
+SELECT Departments.department_name, COUNT(Employees.employee_id) AS employee_count
+FROM Departments
+INNER JOIN Employees ON Employees.department_id = Departments.department_id
+GROUP BY Departments.department_name;
+
+4)
+SELECT Departments.department_name, AVG(Salaries.salary) AS average_salary
+FROM Departments, Employees, Salaries
+WHERE Employees.department_id = Departments.department_id
+AND Employees.employee_id = Salaries.employee_id
+GROUP BY Departments.department_name;
+
+5)
+SELECT Departments.department_name, AVG(Salaries.salary) AS average_salary
+FROM Departments
+INNER JOIN Employees ON Employees.department_id = Departments.department_id
+INNER JOIN Salaries ON Employees.employee_id = Salaries.employee_id
+GROUP BY Departments.department_name;
+
+6)
+SELECT MAX(Salaries.salary) 
+FROM Salaries;
